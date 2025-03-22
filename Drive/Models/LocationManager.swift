@@ -12,6 +12,7 @@ import SwiftUI
 class LocationManager: NSObject, ObservableObject, CLLocationManagerDelegate {
     private let manager = CLLocationManager()
     
+    @Published var speed: Double = 0.0
     @Published var region = MKCoordinateRegion(
         center: CLLocationCoordinate2D(latitude: 37.334900, longitude: -122.009020),
         span: MKCoordinateSpan(latitudeDelta: 0.02, longitudeDelta: 0.02)
@@ -31,6 +32,7 @@ class LocationManager: NSObject, ObservableObject, CLLocationManagerDelegate {
                 withAnimation {
                     self.region.center = latestLocation.coordinate
                     self.recenterMapAboveOverlay()
+                    self.speed = max(latestLocation.speed, 0) * 2.23694 // converts to mph
                 }
             }
         }
@@ -46,4 +48,5 @@ class LocationManager: NSObject, ObservableObject, CLLocationManagerDelegate {
         )
         self.region.center = newCenter
     }
+    
 }

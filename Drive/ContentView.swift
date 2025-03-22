@@ -15,7 +15,11 @@ struct ContentView: View {
                 }
             TrackView()
                 .tabItem {
-                    Label("Tracks", systemImage: "tray.and.arrow.down.fill")
+                    Label("Tracks", systemImage: "point.forward.to.point.capsulepath")
+                }
+            LogBookView()
+                .tabItem {
+                    Label("Logbook", systemImage: "book")
                 }
             MycarView()
                 .tabItem {

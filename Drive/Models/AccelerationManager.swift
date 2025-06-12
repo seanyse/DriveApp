@@ -44,6 +44,10 @@ class AccelerationManager: ObservableObject {
     func stopUpdates() {
         motionManager.stopAccelerometerUpdates()
     }
+//    func getRotationMatrix() {
+//        return motionManager.attitude.rotationMatrix
+//    }
+    
     func time() -> Double {
         return Date().timeIntervalSince1970
     }

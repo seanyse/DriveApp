@@ -29,9 +29,22 @@
 		B0C1BEA42D7B8EA700C2B0A0 /* DriveUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = DriveUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		B04520BF2DC09B9D000B5845 /* Exceptions for "Drive" folder in "Drive" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = B0C1BE892D7B8EA500C2B0A0 /* Drive */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		B0C1BE8C2D7B8EA500C2B0A0 /* Drive */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				B04520BF2DC09B9D000B5845 /* Exceptions for "Drive" folder in "Drive" target */,
+			);
 			path = Drive;
 			sourceTree = "<group>";
 		};
@@ -399,7 +412,9 @@
 				DEVELOPMENT_TEAM = 27VMP3QL44;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = Drive/Info.plist;
 				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "Drive needs location data to operate";
+				INFOPLIST_KEY_NSMotionUsageDescription = "Drive needs motion data to operate";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -429,7 +444,9 @@
 				DEVELOPMENT_TEAM = 27VMP3QL44;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = Drive/Info.plist;
 				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "Drive needs location data to operate";
+				INFOPLIST_KEY_NSMotionUsageDescription = "Drive needs motion data to operate";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;

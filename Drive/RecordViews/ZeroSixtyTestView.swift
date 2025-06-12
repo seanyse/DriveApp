@@ -8,25 +8,24 @@
 import SwiftUI
 
 struct ZeroSixtyTestView: View {
-    @StateObject private var accelerationManager = AccelerationManager()
     @StateObject private var locationManager = LocationManager()
-    
-    @State private var status: String = "Not Ready"
-    @State private var timer: Double = 0.000
-    @State private var speed: Double = 0.000
+    @StateObject private var fusion = ZeroSixtyManager()
     @State private var acceleration: Double = 0.000
 
 
     var body: some View {
         VStack {
-            statusView(status: status)
+            
             Spacer()
-            zeroSixtyView(timer: timer)
+            guiView()
             Spacer()
+            zeroSixtyView()
             HStack {
                 speedView()
                 accelerationView()
             }
+            statusView()
+
         }
 //        Text("0-60!")
 //        Text("X: \(accelerationManager.accelerationX, specifier: "%.3f")")
@@ -38,6 +37,24 @@ struct ZeroSixtyTestView: View {
 //        }
         
     }
+    private func guiView() -> some View {
+            // compute once per body-eval
+            let progress = min(max(fusion.speed / 60, 0), 1)
+
+            return ZStack {
+                Circle()
+                    .stroke(Color.gray, lineWidth: 15)
+                    .frame(width: 300, height: 300)
+
+                Circle()
+                    .trim(from: 0, to: progress)
+                    .stroke(Color.blue, lineWidth: 15)
+                    .frame(width: 300, height: 300)
+                    .rotationEffect(.degrees(-90))
+                    .animation(.linear(duration: 0.5), value: progress)
+        }
+    }
+    
     private func speedView() -> some View {
         ZStack {
             RoundedRectangle(cornerRadius: 10)
@@ -46,7 +63,7 @@ struct ZeroSixtyTestView: View {
                 .frame(width: 170, height: 100)
                 .padding(3)
             VStack {
-                Text("\(locationManager.speed, specifier: "%.2f") mph")
+                Text(String(format: "%.1f mph", fusion.speed))
             }
         }
     }
@@ -58,7 +75,42 @@ struct ZeroSixtyTestView: View {
                 .frame(width: 170, height: 100)
                 .padding(3)
             VStack {
-                Text("\(accelerationManager.acc_mag, specifier: "%.2f") g")
+                Text("\(fusion.a_mag, specifier: "%.2f") g")
+            }
+        }
+    }
+
+    private func statusView() -> some View {
+        ZStack {
+            RoundedRectangle(cornerRadius: 10)
+                .fill(Color.white)
+                .shadow(radius: 2.0)
+                .frame(width: 350, height: 50)
+                .padding(3)
+            VStack {
+                Button(action: {
+                    fusion.userStart.toggle()
+                    
+                    fusion.userStart ? fusion.startRecording() : fusion.stopRecording()
+                }) {
+                    Text(fusion.userStart ? "Stop Recording": "Start Recording")
+                }
+            }
+        }
+    }
+    private func zeroSixtyView() -> some View {
+        ZStack {
+            RoundedRectangle(cornerRadius: 10)
+                .fill(Color.white)
+                .shadow(radius: 2.0)
+                .frame(width: 350, height: 100)
+                .padding(3)
+            VStack {
+//                if let t = fusion.zeroTo60 {
+//                    Text(String(format: "%.2f s", t))
+//                } else {
+//                    Text("0.00 s")
+//                }
             }
         }
     }
@@ -66,30 +118,6 @@ struct ZeroSixtyTestView: View {
 
 }
 
-private func statusView(status: String) -> some View {
-    ZStack {
-        RoundedRectangle(cornerRadius: 10)
-            .fill(Color.white)
-            .shadow(radius: 2.0)
-            .frame(width: 350, height: 100)
-            .padding(3)
-        VStack {
-            Text(status)
-        }
-    }
-}
-private func zeroSixtyView(timer: Double) -> some View {
-    ZStack {
-        RoundedRectangle(cornerRadius: 10)
-            .fill(Color.white)
-            .shadow(radius: 2.0)
-            .frame(width: 350, height: 100)
-            .padding(3)
-        VStack {
-            Text("\(timer, specifier: "%.3f") s")
-        }
-    }
-}
 
 
 

@@ -35,7 +35,7 @@ private func menuView() -> some View {
             .fill(Color.white)
             .opacity(0.85)
             .shadow(radius: 5.0)
-            .frame(height: 450)
+            .frame(height: 400)
 
                     
         
@@ -50,7 +50,7 @@ private func menuView() -> some View {
             HStack {
                 Spacer()
                 actionButton_record()
-                actionButton_record_drift()
+//                actionButton_record_drift()
                 Spacer()
             }
             HStack {
@@ -73,7 +73,7 @@ private func actionButton_record() -> some View {
                 RoundedRectangle(cornerRadius: 10)
                     .fill(Color.white)
                     .shadow(radius: 2.0)
-                    .frame(height: 135)
+                    .frame(height: 115)
                     .padding(3)
 
                 VStack {
@@ -87,7 +87,7 @@ private func actionButton_record() -> some View {
                         .font(.body)
                         .foregroundColor(.black)
                         .bold()
-                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .frame(maxWidth: .infinity, alignment: .center)
                         .padding(15)
                 }
             }

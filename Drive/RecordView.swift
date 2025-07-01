@@ -12,22 +12,31 @@ import CoreLocation
 
 struct RecordView: View {
     @StateObject private var locationManager = LocationManager()
+    // for draggable
+    @GestureState private var dragOffset: CGFloat = 0
+    @State private var menuOffset: CGFloat = 0
+    private let minOffset: CGFloat = 0       // Fully shown
+    private let maxOffset: CGFloat = 340
 
     var body: some View {
         NavigationStack {
             ZStack(alignment: .topLeading) {
                 MapView(region: $locationManager.region)
+                    .frame(height:500)
+                Spacer()
                 VStack {
+  
                     Spacer()
                     menuView()
-                    
                 }
 
-            }.ignoresSafeArea(.all)
+            }.ignoresSafeArea(edges: [.bottom])
 
         }
     }
 }
+
+
 
 private func menuView() -> some View {
     ZStack(alignment: .top) {
@@ -35,18 +44,13 @@ private func menuView() -> some View {
             .fill(Color.white)
             .opacity(0.85)
             .shadow(radius: 5.0)
-            .frame(height: 400)
-
-                    
-        
+            .frame(height: 425)
         VStack(spacing:0) {
             Text("Good Afternoon")
                 .font(.title)
                 .bold()
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .padding(15)
-                
-            
             HStack {
                 Spacer()
                 actionButton_record()
@@ -59,16 +63,13 @@ private func menuView() -> some View {
                 actionButton_top_speed()
                 Spacer()
             }
-//            Spacer()
-
         }
         Spacer()
-        
     }
 }
 
 private func actionButton_record() -> some View {
-    NavigationLink(destination: RecordDriveView()) { // Replace with your actual destination
+    NavigationLink(destination: RecordDriveView()) {
             ZStack {
                 RoundedRectangle(cornerRadius: 10)
                     .fill(Color.white)

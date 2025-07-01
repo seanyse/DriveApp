@@ -25,20 +25,13 @@ struct ZeroSixtyTestView: View {
                 accelerationView()
             }
             statusView()
+            Spacer()
 
         }
-//        Text("0-60!")
-//        Text("X: \(accelerationManager.accelerationX, specifier: "%.3f")")
-//        Text("Y: \(accelerationManager.accelerationY, specifier: "%.3f")")
-//        Text("Z: \(accelerationManager.accelerationZ, specifier: "%.3f")")
-//        
-//        Button("Stop Updates") {
-//            accelerationManager.stopUpdates()
-//        }
-        
     }
     private func guiView() -> some View {
             // compute once per body-eval
+            // clamps progess to be a valid value for the gui, progress is value 0-1
             let progress = min(max(fusion.speed / 60, 0), 1)
 
             return ZStack {
@@ -50,7 +43,7 @@ struct ZeroSixtyTestView: View {
                     .trim(from: 0, to: progress)
                     .stroke(Color.blue, lineWidth: 15)
                     .frame(width: 300, height: 300)
-                    .rotationEffect(.degrees(-90))
+                    .rotationEffect(.degrees(90))
                     .animation(.linear(duration: 0.5), value: progress)
         }
     }
@@ -93,7 +86,7 @@ struct ZeroSixtyTestView: View {
                     
                     fusion.userStart ? fusion.startRecording() : fusion.stopRecording()
                 }) {
-                    Text(fusion.userStart ? "Stop Recording": "Start Recording")
+                    Text(fusion.userStart ? "Abort Recording": "Start Recording")
                 }
             }
         }
@@ -106,11 +99,7 @@ struct ZeroSixtyTestView: View {
                 .frame(width: 350, height: 100)
                 .padding(3)
             VStack {
-//                if let t = fusion.zeroTo60 {
-//                    Text(String(format: "%.2f s", t))
-//                } else {
-//                    Text("0.00 s")
-//                }
+                Text("0-60:")
             }
         }
     }

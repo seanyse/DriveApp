@@ -13,6 +13,8 @@ import Combine
 class ZeroSixtyManager: ObservableObject {
     // ui variables
     @Published var log: String = ""
+    @Published var analysisView: Bool = false
+    @Published var analysis_vel: [(timestamp: TimeInterval, speed: Double)] = []
 //    user start recording
     @Published var userStart = false
     @Published var speed: Double = 0.0
@@ -262,6 +264,10 @@ class ZeroSixtyManager: ObservableObject {
         
         let calculated_time = final_time - inital_time
         log += "Calculated time: \(calculated_time)\n"
+        
+        // for analysis view
+        analysis_vel = analysis_velocity(velocity_list: calculated_velocity, gps_list: self.s_stamp, initial_time: initial_time)
+        analysisView = true
   
     }
     
@@ -295,8 +301,36 @@ class ZeroSixtyManager: ObservableObject {
         return (rx, ry, rz)
     }
     
+    // combines gps list and velocity list to present into analysis view
+    func analysis_velocity(velocity_list: [(timestamp: TimeInterval, speed: Double)], gps_list: [s_stamp_struct],initial_time: TimeInterval) -> [(timestamp: TimeInterval, speed: Double)] {
+        var analysis_vel:[(timestamp: TimeInterval, speed: Double)] = []
+        var gps_initial_index = -1
+        // get initial for gps
+        for i in 0..<gps_list.count{
+            if gps_list[i].timestamp == initial_time {
+                gps_initial_index = i
+                break
+            }
+        }
+        // reformat gps_list for easy appending
+        var gps_list_formatted:[(timestamp: TimeInterval, speed: Double)] = []
+        for i in gps_initial_index..<gps_list.count {
+            let gps = gps_list[i]
+            gps_list_formatted.append((timestamp: gps.timestamp, speed: gps.x))
+        }
+        analysis_vel = gps_list_formatted + velocity_list
+        return analysis_vel
+    }
+    
+    func toggleRecording() {
+        userStart.toggle()
+        userStart ? startRecording() : stopRecording()
+    }
+    
 //    stop all updates
     func stopRecording() {
+        log += "Ended Recording\n"
+        analysisView = true
         motionManager.stopDeviceMotionUpdates()
     }
     

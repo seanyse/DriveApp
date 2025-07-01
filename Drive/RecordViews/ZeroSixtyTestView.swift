@@ -7,28 +7,36 @@
 
 import SwiftUI
 
+
+
 struct ZeroSixtyTestView: View {
-    @StateObject private var locationManager = LocationManager()
     @StateObject private var fusion = ZeroSixtyManager()
-    @State private var acceleration: Double = 0.000
-
-
+    
     var body: some View {
-        VStack {
-            
-            Spacer()
-            guiView()
-            Spacer()
-            zeroSixtyView()
-            HStack {
-                speedView()
-                accelerationView()
-            }
-            statusView()
-            Spacer()
+        NavigationStack {
+            VStack {
+                NavigationLink(
+                    destination: ZeroSixtyAnalysisView(analysis_vel: fusion.analysis_vel),
+                    isActive: $fusion.analysisView
+                ) {
+                    EmptyView()
+                }
+                .hidden()
+                Spacer()
+                guiView()
+                Spacer()
+                zeroSixtyView()
+                HStack {
+                    speedView()
+                    accelerationView()
+                }
+                statusView()
+                Spacer()
 
+            }
         }
     }
+        
     private func guiView() -> some View {
             // compute once per body-eval
             // clamps progess to be a valid value for the gui, progress is value 0-1
@@ -82,9 +90,7 @@ struct ZeroSixtyTestView: View {
                 .padding(3)
             VStack {
                 Button(action: {
-                    fusion.userStart.toggle()
-                    
-                    fusion.userStart ? fusion.startRecording() : fusion.stopRecording()
+                    fusion.toggleRecording()
                 }) {
                     Text(fusion.userStart ? "Abort Recording": "Start Recording")
                 }
@@ -96,18 +102,21 @@ struct ZeroSixtyTestView: View {
             RoundedRectangle(cornerRadius: 10)
                 .fill(Color.white)
                 .shadow(radius: 2.0)
-                .frame(width: 350, height: 100)
+                .frame(width: 350, height: 130)
                 .padding(3)
-            VStack {
-                Text("0-60:")
-            }
+            
+                ScrollView {
+                    Text(fusion.log)
+                        .padding(0)
+                        .frame(width: 340, height: 120)
+                }
+                .frame(width: 340, height: 120)
+            
         }
     }
 
 
 }
-
-
 
 
 #Preview {

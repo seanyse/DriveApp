@@ -31,7 +31,7 @@ class LocationManager: NSObject, ObservableObject, CLLocationManagerDelegate {
             DispatchQueue.main.async {
                 withAnimation {
                     self.region.center = latestLocation.coordinate
-                    self.recenterMapAboveOverlay()
+//                    self.recenterMapAboveOverlay()
                     self.speed = max(latestLocation.speed, 0) * 2.23694 // converts to mph
                 }
             }

@@ -7,38 +7,39 @@
 
 import SwiftUI
 
+
+
 struct ZeroSixtyTestView: View {
-    @StateObject private var locationManager = LocationManager()
     @StateObject private var fusion = ZeroSixtyManager()
-    @State private var acceleration: Double = 0.000
-
-
+    
     var body: some View {
-        VStack {
-            
-            Spacer()
-            guiView()
-            Spacer()
-            zeroSixtyView()
-            HStack {
-                speedView()
-                accelerationView()
-            }
-            statusView()
+        NavigationStack {
+            VStack {
+                NavigationLink(
+                    destination: ZeroSixtyAnalysisView(analysis_vel: fusion.analysis_vel),
+                    isActive: $fusion.analysisView
+                ) {
+                    EmptyView()
+                }
+                .hidden()
+                Spacer()
+                guiView()
+                Spacer()
+                zeroSixtyView()
+                HStack {
+                    speedView()
+                    accelerationView()
+                }
+                statusView()
+                Spacer()
 
+            }
         }
-//        Text("0-60!")
-//        Text("X: \(accelerationManager.accelerationX, specifier: "%.3f")")
-//        Text("Y: \(accelerationManager.accelerationY, specifier: "%.3f")")
-//        Text("Z: \(accelerationManager.accelerationZ, specifier: "%.3f")")
-//        
-//        Button("Stop Updates") {
-//            accelerationManager.stopUpdates()
-//        }
-        
     }
+        
     private func guiView() -> some View {
             // compute once per body-eval
+            // clamps progess to be a valid value for the gui, progress is value 0-1
             let progress = min(max(fusion.speed / 60, 0), 1)
 
             return ZStack {
@@ -50,7 +51,7 @@ struct ZeroSixtyTestView: View {
                     .trim(from: 0, to: progress)
                     .stroke(Color.blue, lineWidth: 15)
                     .frame(width: 300, height: 300)
-                    .rotationEffect(.degrees(-90))
+                    .rotationEffect(.degrees(90))
                     .animation(.linear(duration: 0.5), value: progress)
         }
     }
@@ -89,11 +90,9 @@ struct ZeroSixtyTestView: View {
                 .padding(3)
             VStack {
                 Button(action: {
-                    fusion.userStart.toggle()
-                    
-                    fusion.userStart ? fusion.startRecording() : fusion.stopRecording()
+                    fusion.toggleRecording()
                 }) {
-                    Text(fusion.userStart ? "Stop Recording": "Start Recording")
+                    Text(fusion.userStart ? "Abort Recording": "Start Recording")
                 }
             }
         }
@@ -103,22 +102,21 @@ struct ZeroSixtyTestView: View {
             RoundedRectangle(cornerRadius: 10)
                 .fill(Color.white)
                 .shadow(radius: 2.0)
-                .frame(width: 350, height: 100)
+                .frame(width: 350, height: 130)
                 .padding(3)
-            VStack {
-//                if let t = fusion.zeroTo60 {
-//                    Text(String(format: "%.2f s", t))
-//                } else {
-//                    Text("0.00 s")
-//                }
-            }
+            
+                ScrollView {
+                    Text(fusion.log)
+                        .padding(0)
+                        .frame(width: 340, height: 120)
+                }
+                .frame(width: 340, height: 120)
+            
         }
     }
 
 
 }
-
-
 
 
 #Preview {

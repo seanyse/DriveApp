@@ -10,8 +10,6 @@ import Charts
 
 struct ZeroSixtyAnalysisView: View {
     let analysis_vel: [(timestamp: TimeInterval, speed: Double)]
-    let final_time: Double
-    let max_accel: Double
     var body: some View {
         Spacer()
         Text("Vehicle Performance Results - from DriveApp")
@@ -69,7 +67,7 @@ struct ZeroSixtyAnalysisView: View {
                         .foregroundColor(.blue)
                     //            Spacer()
                     
-                    Text(String(format: "%.2fs", final_time))
+                    Text("--")
                         .font(.title3)
                         .bold()
                     Text("0-60")
@@ -141,5 +139,5 @@ private func resultView() -> some View {
             (timestamp: 3.0, speed: 30.0),
             (timestamp: 4.0, speed: 60.0)
         ]
-    ZeroSixtyAnalysisView(analysis_vel: dummyData, final_time: 4.53, max_accel: 1200.0)
+    ZeroSixtyAnalysisView(analysis_vel: dummyData)
 }

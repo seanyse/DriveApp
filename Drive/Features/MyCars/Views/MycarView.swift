@@ -35,62 +35,74 @@ struct MycarView: View {
 
     var body: some View {
         NavigationView {
-            ScrollView {
-                VStack(spacing: 16) {
-                    ForEach(viewModel.cars) { car in
-                        NavigationLink(destination: CarDetailView(car: car)) {
-                            CarRowView(car: car)
+            ZStack {
+                Color(.systemGray6)
+                    .ignoresSafeArea()
+                
+                ScrollView {
+                    VStack(spacing: 12) {
+                        ForEach(viewModel.cars) { car in
+                            NavigationLink(destination: CarDetailView(car: car)) {
+                                CarRowView(car: car)
+                            }
+                            .buttonStyle(.plain)
                         }
                     }
+                    .padding()
                 }
-                .padding()
             }
             .navigationTitle("My Cars")
-            .background(Color(.systemGray6))
         }
     }
 }
+
 struct CarRowView: View {
     let car: Car
 
     var body: some View {
-        HStack(spacing: 20) {
-            // Car Image
-            Image(systemName: car.imageName)
-                .resizable()
-                .aspectRatio(contentMode: .fit)
-                .frame(width: 60, height: 60)
-                .padding()
-                .background(Color(.systemGray6))
-//                .clipShape(Circle())
+        HStack(spacing: 16) {
+            // Car Icon
+            ZStack {
+                RoundedRectangle(cornerRadius: 16)
+                    .fill(.blue.gradient.opacity(0.2))
+                    .frame(width: 70, height: 70)
+                
+                Image(systemName: car.imageName)
+                    .resizable()
+                    .aspectRatio(contentMode: .fit)
+                    .frame(width: 40, height: 40)
+                    .foregroundStyle(.blue.gradient)
+            }
 
             // Car Details
-            VStack(alignment: .leading, spacing: 4) {
+            VStack(alignment: .leading, spacing: 8) {
                 Text(car.name)
-                    .font(.title2)
+                    .font(.title3)
                     .fontWeight(.bold)
                     .foregroundColor(.primary)
-
-                Text("Year: \(car.year)")
-                    .font(.subheadline)
-                    .foregroundColor(.secondary)
-
-                Text("HP: \(car.horsepower)")
-                    .font(.subheadline)
-                    .foregroundColor(.secondary)
+                
+                HStack(spacing: 12) {
+                    Label("\(car.year)", systemImage: "calendar")
+                    Label("\(car.horsepower) HP", systemImage: "speedometer")
+                    Label("\(car.mileage)", systemImage: "gauge.high")
+                }
+                .font(.caption)
+                .foregroundColor(.secondary)
             }
 
             Spacer()
 
             // Navigation Indicator
             Image(systemName: "chevron.right")
-//                .foregroundColor(.gray)
-                .imageScale(.medium)
+                .foregroundColor(.secondary)
+                .imageScale(.small)
         }
         .padding()
-        .background(Color.white)
-        .cornerRadius(12)
-        .shadow(color: Color.black.opacity(0.1), radius: 4, x: 0, y: 2)
+        .background(
+            RoundedRectangle(cornerRadius: 16)
+                .fill(Color(.systemBackground))
+                .shadow(color: .black.opacity(0.05), radius: 8, x: 0, y: 2)
+        )
     }
 }
 

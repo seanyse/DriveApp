@@ -4,6 +4,7 @@
 //
 //  Created by Sean Yan on 3/7/25.
 //
+
 import Foundation
 import CoreLocation
 import MapKit
@@ -12,6 +13,7 @@ import SwiftUI
 class LocationManager: NSObject, ObservableObject, CLLocationManagerDelegate {
     private let manager = CLLocationManager()
     
+    @Published var location: CLLocation?
     @Published var speed: Double = 0.0
     @Published var region = MKCoordinateRegion(
         center: CLLocationCoordinate2D(latitude: 37.334900, longitude: -122.009020),
@@ -27,20 +29,18 @@ class LocationManager: NSObject, ObservableObject, CLLocationManagerDelegate {
     }
     
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-        if let latestLocation = locations.last {
-            DispatchQueue.main.async {
-                withAnimation {
-                    self.region.center = latestLocation.coordinate
-//                    self.recenterMapAboveOverlay()
-                    self.speed = max(latestLocation.speed, 0) * 2.23694 // converts to mph
-                }
+        guard let latestLocation = locations.last else { return }
+        
+        DispatchQueue.main.async {
+            withAnimation {
+                self.location = latestLocation
+                self.region.center = latestLocation.coordinate
+                self.speed = max(latestLocation.speed, 0) * 2.23694
             }
         }
     }
     
     func recenterMapAboveOverlay() {
-        // Suppose region.span.latitudeDelta is how tall your map is in degrees
-        // We can shift the center up by half that to keep the dot near the vertical center
         let latOffset = region.span.latitudeDelta * -0.2
         let newCenter = CLLocationCoordinate2D(
             latitude: region.center.latitude + latOffset,
@@ -48,5 +48,4 @@ class LocationManager: NSObject, ObservableObject, CLLocationManagerDelegate {
         )
         self.region.center = newCenter
     }
-    
 }

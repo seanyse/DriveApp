@@ -13,30 +13,31 @@ struct ZeroSixtyTestView: View {
     @StateObject private var fusion = ZeroSixtyManager()
     
     var body: some View {
-        NavigationStack {
-            VStack {
-                NavigationLink(
-                    destination: ZeroSixtyAnalysisView(analysis_vel: fusion.analysis_vel),
-                    isActive: $fusion.analysisView
-                ) {
-                    EmptyView()
-                }
-                .hidden()
-                Spacer()
-                guiView()
-                Spacer()
-                zeroSixtyView()
-                HStack {
-                    speedView()
-                    accelerationView()
-                }
-                statusView()
-                Spacer()
-
+        VStack {
+            NavigationLink(
+                destination: ZeroSixtyAnalysisView(analysis_vel: fusion.analysis_vel),
+                isActive: $fusion.analysisView
+            ) {
+                EmptyView()
             }
+            .hidden()
+
+            Spacer()
+            guiView()
+            Spacer()
+            zeroSixtyView()
+            HStack {
+                speedView()
+                accelerationView()
+            }
+            statusView()
+            Spacer()
         }
-    }
+        .navigationTitle("0–60 Test")
         
+    }
+
+
     private func guiView() -> some View {
             // compute once per body-eval
             // clamps progess to be a valid value for the gui, progress is value 0-1
